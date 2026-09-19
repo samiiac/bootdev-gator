@@ -10,6 +10,32 @@ type Commands struct {
 	cmdRegistry  map[string]func(*state,Command)error
 }
 
+func newCommands() *Commands {
+  c := &Commands{
+    cmdRegistry : make(map[string]func(*state,Command)error),
+  }
+  err := c.register("login",handlerLogin)
+
+    if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   err = c.register("register",handlerRegister)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+    err = c.register("reset",handlerReset)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   return c
+}
+
 func (c *Commands) run(s *state,cmd Command) error {
   handler,ok:= c.cmdRegistry[cmd.name]
   if !ok {
@@ -23,9 +49,6 @@ func (c *Commands) run(s *state,cmd Command) error {
 }
 
 func (c *Commands) register(name string,handler func(*state,Command)error) error {
-  if c.cmdRegistry == nil {
-        c.cmdRegistry = make(map[string]func(*state, Command) error)
-  }
 
   _,ok := c.cmdRegistry[name]
   if ok {
@@ -36,16 +59,3 @@ func (c *Commands) register(name string,handler func(*state,Command)error) error
   return nil
 }
 
-func handlerLogin(s *state,cmd Command) error {
-	if len(cmd.args) <= 0 {
-       return fmt.Errorf("Username required to login.")
-  }
-	
-	username := cmd.args[0]
-	err := s.config.SetUser(username)
-	if err != nil {
-     return err
-	}
-    fmt.Println("Username has been set.")
-	return nil
-}

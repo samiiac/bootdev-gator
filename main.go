@@ -1,11 +1,14 @@
 package main 
 import ("github.com/samiiac/bootdev-gator/internal/config"
+"github.com/samiiac/bootdev-gator/internal/database"
 "fmt"
-
+_ "github.com/lib/pq"
+"database/sql"
 )
 
 
 type state struct{
+   db      *database.Queries
 	config  *config.Config
 }
 
@@ -14,34 +17,39 @@ func main() {
    name,args := args()
    
  
-   commands := Commands{
-	 cmdRegistry : make(map[string]func(*state,Command)error),
-   }
+   //init commands and register handler
+   commands := newCommands()
    command := Command{
     name:name,
     args:args,
    }
-   err := commands.register("login",handlerLogin)
-
-    if err != nil {
-	 //show the err?
-   }
-
+  
+   //read config  data ,open db connection and init state
    configData,err := config.Read()
    if err != nil {
 	 fmt.Errorf("Error while reading the file")
    }
-   fmt.Println(configData)
+
+    db,err := sql.Open("postgres",configData.DbUrl) 
+    if err != nil {
+	 fmt.Println(err)
+   }
+
+   dbQueries := database.New(db)
+  
 
     globalstate := state{
        config : &configData,
+       db:dbQueries,
    }
  
+   //run command
    err = commands.run(&globalstate,command)
    
    if err != nil {
      fmt.Println(err)
    }
+
 
    configData,err = config.Read()
    if err != nil {

@@ -24,7 +24,7 @@ func getConfigPath() (string,error) {
 
 func Read() (Config,error) {
    path,err := getConfigPath()
-   fmt.Println(path)
+   
    
    if err != nil {
      return Config{},err

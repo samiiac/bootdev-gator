@@ -5,7 +5,7 @@ import ("os"
 
 func args()(string,[]string) {
    args := os.Args
-   if len(args) <= 2 {
+   if len(args) < 2 {
     fmt.Errorf("No commands provided")
     os.Exit(1)
    }
