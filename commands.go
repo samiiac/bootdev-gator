@@ -33,6 +33,30 @@ func newCommands() *Commands {
     return nil
    }
 
+   err = c.register("users",handlerGetUsers)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   err = c.register("agg",handlerGetFeed)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   err = c.register("addfeed",handlerAddFeed)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   err = c.register("feeds",handlerDisplayFeed)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
    return c
 }
 
@@ -55,7 +79,7 @@ func (c *Commands) register(name string,handler func(*state,Command)error) error
 	return fmt.Errorf("Command already exists.")
   }
   c.cmdRegistry[name] = handler
-  fmt.Println("Command has been added.")
+
   return nil
 }
 

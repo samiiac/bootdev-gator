@@ -51,10 +51,4 @@ func main() {
    }
 
 
-   configData,err = config.Read()
-   if err != nil {
-	 fmt.Errorf("Error while reading new contents")
-   }
-   fmt.Println(configData)
-
 }
