@@ -45,13 +45,31 @@ func newCommands() *Commands {
     return nil
    }
 
-   err = c.register("addfeed",handlerAddFeed)
+   err = c.register("addfeed",middlewareLoggedIn(handlerAddFeed))
    if err != nil {
 	  fmt.Println(err)
     return nil
    }
 
    err = c.register("feeds",handlerDisplayFeed)
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   err = c.register("follow",middlewareLoggedIn(handlerFollowFeed))
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+   err = c.register("following",middlewareLoggedIn(handlerGetFollowingFeeds))
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
+    err = c.register("unfollow",middlewareLoggedIn(handlerUnfollowFeed))
    if err != nil {
 	  fmt.Println(err)
     return nil
