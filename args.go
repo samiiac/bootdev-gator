@@ -13,7 +13,7 @@ func args()(string,[]string) {
    args = args[1:]
    name := args[0]
    args = args[1:]
-   fmt.Println(args)
+   
    return name,args
 }
 

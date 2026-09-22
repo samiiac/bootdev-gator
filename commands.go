@@ -75,6 +75,12 @@ func newCommands() *Commands {
     return nil
    }
 
+    err = c.register("browse",middlewareLoggedIn(handlerPostFromFollowing))
+   if err != nil {
+	  fmt.Println(err)
+    return nil
+   }
+
    return c
 }
 
